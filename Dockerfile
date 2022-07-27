@@ -18,10 +18,9 @@ LABEL org.opencontainers.image.source=https://github.com/delving-co/cloud-tasks-
 ENTRYPOINT ["/emulator"]
 
 WORKDIR /
-COPY mkcert /usr/local/bin
-COPY rootCA*.pem /root/.local/share/mkcert/
-RUN chmod +x /usr/local/bin/mkcert \
-  && mkcert -install \
-  && rm -rf /usr/local/bin/mkcert
 
 COPY --from=builder /app/emulator .
+
+COPY rootCA.pem /usr/local/share/ca-certificates/rootCA.crt
+RUN cat /usr/local/share/ca-certificates/rootCA.crt >> /etc/ssl/certs/ca-certificates.crt
+# RUN update-ca-certificates
